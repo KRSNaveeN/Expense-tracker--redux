@@ -1,0 +1,14 @@
+.disp{
+    display:flex;
+    background-color: rgb(112, 141, 141);
+    height:60px;
+    align-items: center;
+    justify-content: space-between;
+}
+button{
+    color: rgb(0, 115, 255);
+}
+
+.cancel{
+    display: flex;
+}

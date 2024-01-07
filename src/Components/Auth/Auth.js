@@ -1,73 +1,45 @@
 import classes from './Auth.module.css';
-import {useRef} from 'react';
-
+import {useContext, useRef,useState} from 'react';
+import Context from '../Store/AuthContext'
 
 const Auth = ()=>{
-   const email = useRef();
-   const password = useRef();
-   const confirm = useRef();
-    
-    const submitHandler = async (event)=>{
-        event.preventDefault();
 
-        if(password.current.value != confirm.current.value)
-        {
-            alert("PASSWORD NOT MATCHING");
-            return;
-        }
-
-        let data ={
-            email : email.current.value,
-            password : password.current.value,
-            returnSecureToken : true
-        }
-     try{
-        let response = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCOGbilMEGm-OJcFbkBRGvUEBzxEDlvZJ4", {
-            method: 'POST',
-            body : JSON.stringify(data)
-        });
-        
-        if(response.ok){
-        let ans = await response.json();
-        console.log(ans);
-        }
-        else
-        {
-            throw new Error("Authentication failed");
-        }
-    }
-    catch(error)
-    {
-        alert(error);
-    }
-
-    }
+let ctx = useContext(Context);
 
 
-    return <form onSubmit={submitHandler} className={classes.backdrop}>
-        <div>
-        <h3>Sign up</h3>
+  return <div>
+        <form onSubmit={ctx.submitHandler} className={classes.backdrop}>
+            <div>
+            <h3>{!ctx.login ? "Sign up" : "Login"}</h3>
     <section className={classes.sec}>
 
         <div>
             <label>Email</label>
-            <input ref={email} type='text' required/>
+            <input ref={ctx.email} type='text' required/>
         </div>
         <div>
             <label>Password</label>
-            <input ref={password} type='password' required/>
+            <input ref={ctx.password} type='password' required/>
         </div>
         <div>
             <label>Confirm Password</label>
-            <input ref={confirm} type='password' required/>
+            <input ref={ctx.confirm} type='password' required/>
         </div>
     </section>
-     <button>Sign Up</button>
+     <button>{!ctx.login ? "Sign up" : "Login"}</button>
+            </div>
+       
+        </form>
+
+        <div>
+           <button className={classes.log}>
+           <h4 onClick={ctx.loginHandler}>Already have an Account? Login</h4>
+            </button> 
         </div>
 
    
 
-    </form>
+    </div>
 }
 
 export default Auth;

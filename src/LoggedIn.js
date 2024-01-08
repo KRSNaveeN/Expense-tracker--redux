@@ -2,6 +2,8 @@ import classes from './LoggedIn.module.css';
 import React, { useContext, useEffect } from 'react';
 import { useState, useRef } from 'react';
 import Context from './Components/Store/AuthContext';
+import Additems from './Components/Items/Additems';
+import Listitems from './Components/Items/Listitems';
 const LoggedIn = ()=>{
      let ctx = useContext(Context);
      let name = useRef();
@@ -101,12 +103,20 @@ const LoggedIn = ()=>{
         Complete Your Profile
         {/* <button onClick={ProfileHandler}>Complete Now</button> */}
         </h3>
+
             </>
         }
+        
        
     </div>
-    {
+        {
             !profile && <button onClick={verifyEmailHandler}>Verify Email</button>
+        }
+        {
+            !profile &&  <Additems/>
+        }
+        {
+            !profile && <Listitems/> 
         }
     {
         profile && <section className={classes.contact}>
@@ -127,6 +137,7 @@ const LoggedIn = ()=>{
             <button onClick={updateHandler}>Update</button>
         </section>
     }
+   
       
     </>
 }

@@ -11,6 +11,11 @@ export const ContextProvider = (props)=>{
     const [pass , setPass] = useState(false);
     const[load, setLoad] = useState(false);
 
+    let amount =  useRef();
+    let description = useRef();
+    let option = useRef();
+    const [listitems, setListitems] = useState([]);
+
     const loginHandler = ()=>{
         setLogin((pre)=>!pre);
      }
@@ -102,6 +107,18 @@ export const ContextProvider = (props)=>{
     
         }
 
+       
+
+  const submitHandle = (e)=>{
+      e.preventDefault();
+      let expensedata={
+        amount : amount.current.value,
+        description : description.current.value,
+        option : option.current.value
+      }
+      setListitems((pre)=>[...pre, expensedata]);
+  }
+
         const val = {
             submitHandler : submitHandler,
             loginHandler : loginHandler,
@@ -116,7 +133,12 @@ export const ContextProvider = (props)=>{
             passwordHandler : passwordHandler,passwordcorrection:passwordcorrection,
             pass:pass,
             load:load,
-            back : back
+            back : back,
+            amount:amount,
+            description: description,
+            option:option,
+            submitHandle : submitHandle,
+            listitems : listitems
         }
     return<Context.Provider value={val}>
         {props.children}

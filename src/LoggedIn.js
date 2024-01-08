@@ -76,7 +76,14 @@ const LoggedIn = ()=>{
      });
      let data = await response.json();
      console.log(data);
+
+    
     }
+
+    const logoutHandler = ()=>{
+        ctx.setToken(null);
+        localStorage.removeItem("token");
+     }
     return<>
     <div className={classes.disp}>
         {
@@ -103,6 +110,9 @@ const LoggedIn = ()=>{
         }
     {
         profile && <section className={classes.contact}>
+            <div>
+                <button onClick={logoutHandler}>LOGOUT</button>
+            </div>
             <div className={classes.cancel}>
                 <h2>Contact</h2>
                 <button>Cancel</button>

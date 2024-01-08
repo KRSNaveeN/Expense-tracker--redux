@@ -8,9 +8,11 @@ export default Context;
 export const ContextProvider = (props)=>{
     const [login, setLogin] = useState(false);
     const [token, setToken] = useState(null);
+    const [pass , setPass] = useState(false);
+    const[load, setLoad] = useState(false);
 
     const loginHandler = ()=>{
-        setLogin(true);
+        setLogin((pre)=>!pre);
      }
       const  userLogged = !!(localStorage.getItem("token"));
    
@@ -19,9 +21,40 @@ export const ContextProvider = (props)=>{
      const email = useRef();
      const password = useRef();
      const confirm = useRef();
+     const reenteredemail = useRef();
      const loggedin = (token)=>{
        setToken(token)
        localStorage.setItem("token", token);
+     }
+
+     const passwordHandler = () =>{
+        console.log("inside 1");
+        setPass(true)
+     }
+     const back = ()=>{
+        setPass(false);
+     }
+
+     const passwordcorrection = async ()=>{
+        console.log("inside 2");
+        setLoad((pre)=>!pre);
+        console.log(reenteredemail.current.value);
+        console.log("inside password");
+          let response = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCOGbilMEGm-OJcFbkBRGvUEBzxEDlvZJ4",{
+              method : 'POST',
+              body : JSON.stringify({
+                requestType : "PASSWORD_RESET",
+                email : reenteredemail.current.value,
+              })
+          });
+
+          if(response.ok)
+          {
+            let data = await response.json();
+            console.log(data);
+          }
+          setLoad((pre)=>!pre)
+          setPass(false);
      }
 
      const submitHandler = async (event)=>{
@@ -75,9 +108,15 @@ export const ContextProvider = (props)=>{
             login : login,
             setLogin : setLogin,
             email : email,
+            reenteredemail:reenteredemail,
             password: password,
             confirm : confirm,
-            userLogged : userLogged
+            userLogged : userLogged,
+            setToken : setToken,
+            passwordHandler : passwordHandler,passwordcorrection:passwordcorrection,
+            pass:pass,
+            load:load,
+            back : back
         }
     return<Context.Provider value={val}>
         {props.children}

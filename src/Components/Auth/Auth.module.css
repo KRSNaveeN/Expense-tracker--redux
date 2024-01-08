@@ -10,6 +10,8 @@
 }
 input{
     display: block;
+    height : 20px;
+    border-radius: 8px;
 }
 h3,button{
     text-align: center;
@@ -17,7 +19,29 @@ h3,button{
 
 
 .log{
-    margin: auto;
+    /* margin: auto; */
     display: flex;
+    margin : 10px auto;
+    align-items: center;
     
+}
+
+.forgotpassword{
+    display: flex;
+    flex-direction: column;
+    min-width: 400px;
+    margin :  auto;
+    /* margin-top: 200px; */
+    position: absolute;
+    top:35%;
+    left : 30%;
+    gap : 20px;
+    background-color: rgb(147, 163, 163);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.background{
+    background-color: rgb(105, 86, 62);
+    height:100vh;
 }

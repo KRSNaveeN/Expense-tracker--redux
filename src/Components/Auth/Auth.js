@@ -7,35 +7,59 @@ const Auth = ()=>{
 let ctx = useContext(Context);
 
 
-  return <div>
-        <form onSubmit={ctx.submitHandler} className={classes.backdrop}>
-            <div>
-            <h3>{!ctx.login ? "Sign up" : "Login"}</h3>
-    <section className={classes.sec}>
+  return <div className={classes.background}>
+    {!ctx.pass && <>
+    
+    <form onSubmit={ctx.submitHandler} className={classes.backdrop}>
+    <div>
+    <h3>{!ctx.login ? "Sign up" : "Login"}</h3>
+<section className={classes.sec}>
 
-        <div>
-            <label>Email</label>
-            <input ref={ctx.email} type='text' required/>
-        </div>
-        <div>
-            <label>Password</label>
-            <input ref={ctx.password} type='password' required/>
-        </div>
-        <div>
-            <label>Confirm Password</label>
-            <input ref={ctx.confirm} type='password' required/>
-        </div>
-    </section>
-     <button>{!ctx.login ? "Sign up" : "Login"}</button>
-            </div>
+<div>
+    <label>Email</label>
+    <input ref={ctx.email} type='text' required/>
+</div>
+<div>
+    <label>Password</label>
+    <input ref={ctx.password} type='password' required/>
+</div>
+<div>
+    <label>Confirm Password</label>
+    <input ref={ctx.confirm} type='password' required/>
+</div>
+</section>
+<button>{!ctx.login ? "Sign up" : "Login"}</button>
+    </div>
+
+</form>
        
-        </form>
 
-        <div>
-           <button className={classes.log}>
-           <h4 onClick={ctx.loginHandler}>Already have an Account? Login</h4>
+        <div >
+            <button onClick={ctx.passwordHandler} className={classes.log}>Forget Password</button>
+        </div>
+
+          <div>
+           <button onClick={ctx.loginHandler} className={classes.log}>
+           <h4 >{!ctx.login ? "Already have an Account? Login" : "Sign up with new Account"}</h4>
             </button> 
         </div>
+        </>}
+
+        {
+            ctx.pass && <><div className={classes.forgotpassword}>
+                   <label>Enter email</label>
+                   <input ref={ctx.reenteredemail} type="email"/>
+                   <button onClick={ctx.passwordcorrection}>send password reset link</button>
+                   
+                </div>
+                <button onClick={ctx.back}>Back</button>
+                </>
+        }
+        {
+            ctx.load && <h2>Loading.....</h2>
+        }
+
+        
 
    
 

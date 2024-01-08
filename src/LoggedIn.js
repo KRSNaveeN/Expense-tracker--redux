@@ -8,6 +8,7 @@ const LoggedIn = ()=>{
    let url = useRef();
     const [profile, setProfile]=useState(false);
     const [naam , setNaam] = useState();
+    const [photo, setPhoto] = useState();
     const ProfileHandler = ()=>{
         setProfile(true);
     }
@@ -22,6 +23,7 @@ const LoggedIn = ()=>{
             console.log(data.users[0].displayName);
             console.log(name);
            setNaam(data.users[0].displayName);
+           setPhoto(data.users[0].photoUrl);
             
 
     }
@@ -55,7 +57,7 @@ const LoggedIn = ()=>{
         }
         {
             profile && <>
-            <h2>Learner</h2>
+            <h2>Learners never Quit</h2>
         <h3>
         Complete Your Profile
         {/* <button onClick={ProfileHandler}>Complete Now</button> */}
@@ -73,9 +75,9 @@ const LoggedIn = ()=>{
             <div className={classes.details}>
                 
                 <label htmlFor="">Full Name</label>
-                <input ref={name} type='text' value={naam}/>
+                <input ref={name} type='text' value={naam} onChange={(e)=> setNaam(e.target.value)}/>
                 <label>Profile Photo URL</label>
-                <input ref={url} type='url'/>
+                <input ref={url} type='url' value={photo} onChange={(e)=> setPhoto(e.target.value)}/>
             </div>
             <button onClick={updateHandler}>Update</button>
         </section>

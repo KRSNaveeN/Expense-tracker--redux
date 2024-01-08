@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState ,useRef} from "react";
 
 const Context = React.createContext({});
@@ -8,10 +8,13 @@ export default Context;
 export const ContextProvider = (props)=>{
     const [login, setLogin] = useState(false);
     const [token, setToken] = useState(null);
+
     const loginHandler = ()=>{
         setLogin(true);
      }
-     const userLogged = !!token
+      const  userLogged = !!(localStorage.getItem("token"));
+   
+     
 
      const email = useRef();
      const password = useRef();

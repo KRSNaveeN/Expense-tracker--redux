@@ -31,7 +31,38 @@ const LoggedIn = ()=>{
 
     useEffect(()=>{
       reshow();
-    },[profile])
+    },[profile]);
+
+
+
+    const verifyEmailHandler = async ()=>{
+        try{
+            let response = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCOGbilMEGm-OJcFbkBRGvUEBzxEDlvZJ4",{
+                method : 'POST',
+                body : JSON.stringify({
+                    requestType:"VERIFY_EMAIL",
+                    idToken : localStorage.getItem('token'),
+                })
+              });
+              console.log(response);
+              if(response.ok){
+                const data = await response.json();
+                console.log(data);
+              }
+              else
+              {
+                let data = await response.json();
+                // console.log(data.error.message);
+                throw new Error(data.error.message);
+              }
+             
+        }
+        catch(error){
+            alert(error);
+            console.log(error);
+        }
+      
+    };
    
     const updateHandler = async ()=>{
      let response = await  fetch("https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyCOGbilMEGm-OJcFbkBRGvUEBzxEDlvZJ4", {
@@ -55,6 +86,7 @@ const LoggedIn = ()=>{
             <button onClick={ProfileHandler}>Complete Now</button>
             </h3></>
         }
+        
         {
             profile && <>
             <h2>Learners never Quit</h2>
@@ -66,6 +98,9 @@ const LoggedIn = ()=>{
         }
        
     </div>
+    {
+            !profile && <button onClick={verifyEmailHandler}>Verify Email</button>
+        }
     {
         profile && <section className={classes.contact}>
             <div className={classes.cancel}>

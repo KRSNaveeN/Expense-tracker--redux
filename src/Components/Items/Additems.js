@@ -11,12 +11,12 @@ const Additems = ()=>{
       <form  className={classes.additem}onSubmit={ctx.submitHandle}>
         <div>
             <label>Amout spent</label>
-            <input ref={ctx.amount} type='number' required/>
+            <input ref={ctx.amount} value={ctx.Amount} onChange={(e)=>{ctx.setAmount(e.target.value)}} type='number' required/>
         </div>
 
         <div>
             <label>Item description</label>
-            <input ref={ctx.description} type='text' required/>
+            <input ref={ctx.description} type='text' required value={ctx.Description} onChange={(e)=>{ctx.setDescription(e.target.value)}}/>
         </div>
 
         <div className={classes.but}>

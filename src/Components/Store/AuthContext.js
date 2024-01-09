@@ -10,6 +10,9 @@ export const ContextProvider = (props)=>{
     const [token, setToken] = useState(null);
     const [pass , setPass] = useState(false);
        const[load, setLoad] = useState(false);
+       const [Amount,setAmount] = useState();
+       const [Description, setDescription]= useState();
+
 
 
     let amount =  useRef();
@@ -21,7 +24,16 @@ export const ContextProvider = (props)=>{
         setToken(localStorage.getItem("token"));
         let respose =  await fetch("https://redux-expensetracker-default-rtdb.firebaseio.com/data.json");
         let data = await respose.json();
+        console.log(data);
+        if(data)
+        {
+        //     setListitems([]);
         setListitems(data);
+        }
+        // else{
+        //     setListitems(data);
+        // }
+        // setListitems(data);
         
     }
 
@@ -148,6 +160,11 @@ export const ContextProvider = (props)=>{
       let ans = await response.json();
       console.log(ans);
       setListitems((pre)=>   [...pre, expensedata]);
+
+      setAmount('');
+      setDescription('');
+      
+
   }
 
         const val = {
@@ -170,7 +187,12 @@ export const ContextProvider = (props)=>{
             option:option,
             submitHandle : submitHandle,
             listitems : listitems,
+            setListitems : setListitems,
             token : token,
+            Amount : Amount,
+            Description : Description,
+            setAmount : setAmount,
+            setDescription : setDescription
             // setuserlogged :setuserlogged
         }
     return<Context.Provider value={val}>

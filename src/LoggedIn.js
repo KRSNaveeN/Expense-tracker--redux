@@ -128,7 +128,7 @@ const LoggedIn = ()=>{
         {
             !profile && <Listitems/> 
         }
-    {*9/    +
+    {
         profile && <section className={classes.contact}>
             <div>
                 <button onClick={logoutHandler}>LOGOUT</button>

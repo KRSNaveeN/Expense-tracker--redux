@@ -6,6 +6,7 @@ import Context from './Components/Store/AuthContext';
 
 function App() {
  let ctx = useContext(Context);
+ console.log(ctx.userLogged)
   return (
     <>
     {!ctx.userLogged ? <Auth/> :  <LoggedIn/>}

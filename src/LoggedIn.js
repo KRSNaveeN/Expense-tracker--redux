@@ -33,7 +33,14 @@ const LoggedIn = ()=>{
 
     useEffect(()=>{
       reshow();
+      
     },[profile]);
+
+    useEffect(()=>{
+        if(localStorage.getItem("token") != null){
+            setProfile(false);
+        }
+    },[])
 
 
 
@@ -78,33 +85,36 @@ const LoggedIn = ()=>{
      });
      let data = await response.json();
      console.log(data);
-
-    
     }
 
     const logoutHandler = ()=>{
-        ctx.setToken(null);
         localStorage.removeItem("token");
+        console.log(ctx.token);
+        ctx.setToken(null);
+    
+        
+
+        console.log("inside logout");
+       
      }
-    return<>
+    return <>
     <div className={classes.disp}>
         {
-            !profile && <><h2>Welcome to Expense tracker</h2>
-            <h3>
+            !profile && <><h4>Welcome to Expense tracker</h4>
+            <div>
             Your Profile is Incomplete
             <button onClick={ProfileHandler}>Complete Now</button>
-            </h3></>
+            </div></>
         }
         
         {
             profile && <>
-            <h2>Learners never Quit</h2>
-        <h3>
-        Complete Your Profile
-        {/* <button onClick={ProfileHandler}>Complete Now</button> */}
-        </h3>
+            <h4>Learners never Quit</h4>
+        <div>
+         Your Profile
+        </div>
 
-            </>
+        </>
         }
         
        
@@ -118,7 +128,7 @@ const LoggedIn = ()=>{
         {
             !profile && <Listitems/> 
         }
-    {
+    {*9/    +
         profile && <section className={classes.contact}>
             <div>
                 <button onClick={logoutHandler}>LOGOUT</button>

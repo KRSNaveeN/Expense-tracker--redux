@@ -9,17 +9,38 @@ export const ContextProvider = (props)=>{
     const [login, setLogin] = useState(false);
     const [token, setToken] = useState(null);
     const [pass , setPass] = useState(false);
-    const[load, setLoad] = useState(false);
+       const[load, setLoad] = useState(false);
+
 
     let amount =  useRef();
     let description = useRef();
     let option = useRef();
     const [listitems, setListitems] = useState([]);
 
+    const fetchExpenses = async ()=>{
+        setToken(localStorage.getItem("token"));
+        let respose =  await fetch("https://redux-expensetracker-default-rtdb.firebaseio.com/data.json");
+        let data = await respose.json();
+        setListitems(data);
+        
+    }
+
+    useEffect(()=>{
+      fetchExpenses();
+      
+    }, []);
+
     const loginHandler = ()=>{
         setLogin((pre)=>!pre);
      }
-      const  userLogged = !!(localStorage.getItem("token"));
+    // const  userLogged = !!(localStorage.getItem("token"));
+    const userLogged  = !!token;
+    //   console.log(localStorage.getItem("token"), userLogged);
+
+
+
+      console.log("triggered");
+    
    
      
 
@@ -27,10 +48,11 @@ export const ContextProvider = (props)=>{
      const password = useRef();
      const confirm = useRef();
      const reenteredemail = useRef();
-     const loggedin = (token)=>{
-       setToken(token)
-       localStorage.setItem("token", token);
+     const loggedin = (tokens)=>{
+       setToken(tokens);
+       localStorage.setItem("token", tokens);
      }
+     console.log("tokenis", token);
 
      const passwordHandler = () =>{
         console.log("inside 1");
@@ -93,6 +115,7 @@ export const ContextProvider = (props)=>{
             if(response.ok){
             let ans = await response.json();
             console.log(ans);
+
             loggedin(ans.idToken);
             }
             else
@@ -109,14 +132,22 @@ export const ContextProvider = (props)=>{
 
        
 
-  const submitHandle = (e)=>{
+  const submitHandle = async (e)=>{
       e.preventDefault();
       let expensedata={
         amount : amount.current.value,
         description : description.current.value,
         option : option.current.value
       }
-      setListitems((pre)=>[...pre, expensedata]);
+      
+      
+      let response = await fetch("https://redux-expensetracker-default-rtdb.firebaseio.com/data.json",{
+        method : 'PUT',
+        body : JSON.stringify([...listitems, expensedata])
+      });
+      let ans = await response.json();
+      console.log(ans);
+      setListitems((pre)=>   [...pre, expensedata]);
   }
 
         const val = {
@@ -138,7 +169,9 @@ export const ContextProvider = (props)=>{
             description: description,
             option:option,
             submitHandle : submitHandle,
-            listitems : listitems
+            listitems : listitems,
+            token : token,
+            // setuserlogged :setuserlogged
         }
     return<Context.Provider value={val}>
         {props.children}

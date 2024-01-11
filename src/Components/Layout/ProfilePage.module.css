@@ -1,0 +1,16 @@
+
+.cancel{
+    display: flex;
+    justify-content: space-between;
+}
+
+.contact{
+    max-width: 80vw;
+    margin-left: 100px;
+    padding-top: 100px;
+}
+.details{
+    display : flex;
+    
+    justify-content: space-between;
+}

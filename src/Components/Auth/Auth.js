@@ -2,9 +2,21 @@ import classes from './Auth.module.css';
 import {useContext, useRef,useState} from 'react';
 import Context from '../Store/AuthContext'
 
+import {useDispatch,useSelector} from 'react-redux';
+import { authActions } from '../Store/ReduxStore';
+
 const Auth = ()=>{
 
 let ctx = useContext(Context);
+
+   let  dispatch = useDispatch();
+   let login = useSelector((state)=>state.authdata.login);
+//    dispatch(authActions.login)
+console.log(authActions,login);
+
+const loginHandler = ()=>{
+    dispatch(authActions.login());
+}
 
 
   return <div className={classes.background}>
@@ -12,7 +24,8 @@ let ctx = useContext(Context);
     
     <form onSubmit={ctx.submitHandler} className={classes.backdrop}>
     <div>
-    <h3>{!ctx.login ? "Sign up" : "Login"}</h3>
+    
+    <h3>{!login ? "Sign up" : "Login"}</h3>
 <section className={classes.sec}>
 
 <div>
@@ -28,7 +41,8 @@ let ctx = useContext(Context);
     <input ref={ctx.confirm} type='password' required/>
 </div>
 </section>
-<button>{!ctx.login ? "Sign up" : "Login"}</button>
+
+<button >{!login ? "Sign up" : "Login"}</button>
     </div>
 
 </form>
@@ -39,9 +53,11 @@ let ctx = useContext(Context);
         </div>
 
           <div>
-           <button onClick={ctx.loginHandler} className={classes.log}>
-           <h4 >{!ctx.login ? "Already have an Account? Login" : "Sign up with new Account"}</h4>
+         
+           <button onClick={loginHandler} className={classes.log}>
+            <h4 >{!login ? "Already have an Account? Login" : "Sign up with new Account"}</h4>
             </button> 
+            
         </div>
         </>}
 

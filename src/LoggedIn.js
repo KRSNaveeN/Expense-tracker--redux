@@ -1,48 +1,27 @@
 import classes from './LoggedIn.module.css';
 import React, { useContext, useEffect } from 'react';
-import { useState, useRef } from 'react';
-import Context from './Components/Store/AuthContext';
+import { useState} from 'react';
 import Additems from './Components/Items/Additems';
 import Listitems from './Components/Items/Listitems';
+import ProfilePage from './Components/Layout/ProfilePage';
+import Context from './Components/Store/AuthContext';
 const LoggedIn = ()=>{
-     let ctx = useContext(Context);
-     let name = useRef();
-   let url = useRef();
-    const [profile, setProfile]=useState(false);
-    const [naam , setNaam] = useState();
-    const [photo, setPhoto] = useState();
-    const ProfileHandler = ()=>{
-        setProfile(true);
-    }
-    let NAAM;
-    let reshow = async ()=>{
-        let response = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCOGbilMEGm-OJcFbkBRGvUEBzxEDlvZJ4", {
-            method : 'POST',
-            body : JSON.stringify({
-                idToken:localStorage.getItem('token')
-            }) });
-            let data = await response.json();
-            console.log(data.users[0].displayName);
-            console.log(name);
-           setNaam(data.users[0].displayName);
-           setPhoto(data.users[0].photoUrl);
-            
 
-    }
+     
+    
+    // const [profile, setProfile]=useState(false);
 
-
-    useEffect(()=>{
-      reshow();
-      
-    },[profile]);
-
-    useEffect(()=>{
+    // const ProfileHandler = ()=>{
+    //     setProfile(true);
+    // }
+   const ctx = useContext(Context);
+ useEffect(()=>{
         if(localStorage.getItem("token") != null){
-            setProfile(false);
+            ctx.setProfile(false);
         }
     },[])
 
-
+    console.log(ctx.total, "total caculated");
 
     const verifyEmailHandler = async ()=>{
         try{
@@ -61,7 +40,6 @@ const LoggedIn = ()=>{
               else
               {
                 let data = await response.json();
-                // console.log(data.error.message);
                 throw new Error(data.error.message);
               }
              
@@ -73,82 +51,26 @@ const LoggedIn = ()=>{
       
     };
    
-    const updateHandler = async ()=>{
-     let response = await  fetch("https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyCOGbilMEGm-OJcFbkBRGvUEBzxEDlvZJ4", {
-        method: 'POST',
-        body : JSON.stringify({
-             displayName : name.current.value,
-             photoUrl : url.current.value,
-             returnSecureToken : true,
-             idToken : localStorage.getItem('token'),
-        })
-     });
-     let data = await response.json();
-     console.log(data);
-    }
-
-    const logoutHandler = ()=>{
-        localStorage.removeItem("token");
-        console.log(ctx.token);
-        ctx.setToken(null);
-    
-        
-
-        console.log("inside logout");
-       
-     }
     return <>
-    <div className={classes.disp}>
-        {
-            !profile && <><h4>Welcome to Expense tracker</h4>
-            <div>
-            Your Profile is Incomplete
-            <button onClick={ProfileHandler}>Complete Now</button>
-            </div></>
+    <header className={classes.disp}>
+        {!ctx.profile ? <h4>Welcome to Expense tracker</h4> : <h4>Learners never Quit</h4> }
+        {!ctx.profile ? <div>
+             Your Profile is Incomplete
+            <button onClick={ctx.ProfileHandler}>Complete Now</button>
+            </div> : <h5>Your Profile</h5>
         }
+    </header>
         
-        {
-            profile && <>
-            <h4>Learners never Quit</h4>
-        <div>
-         Your Profile
-        </div>
-
-        </>
-        }
-        
-       
-    </div>
-        {
-            !profile && <button onClick={verifyEmailHandler}>Verify Email</button>
-        }
-        {
-            !profile &&  <Additems/>
-        }
-        {
-            !profile && <Listitems/> 
-        }
+     <section>
     {
-        profile && <section className={classes.contact}>
-            <div>
-                <button onClick={logoutHandler}>LOGOUT</button>
-            </div>
-            <div className={classes.cancel}>
-                <h2>Contact</h2>
-                <button>Cancel</button>
-            </div>
-            <div className={classes.details}>
-                
-                <label htmlFor="">Full Name</label>
-                <input ref={name} type='text' value={naam} onChange={(e)=> setNaam(e.target.value)}/>
-                <label>Profile Photo URL</label>
-                <input ref={url} type='url' value={photo} onChange={(e)=> setPhoto(e.target.value)}/>
-            </div>
-            <button onClick={updateHandler}>Update</button>
-        </section>
+        !ctx.profile ? <>
+        <button onClick={verifyEmailHandler}>Verify Email</button>
+        {(ctx.total >= 10000) && <button>Activate Premium</button>}
+         <Additems/>
+         <Listitems/> 
+        </>: <ProfilePage/>
     }
-   
-      
+    </section>      
     </>
 }
 

@@ -1,70 +1,80 @@
 import React, { useEffect } from "react";
 import { useState ,useRef} from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "./ReduxStore";
+import { listActions } from "./ReduxStore";
 
 const Context = React.createContext({});
 
 export default Context;
 
 export const ContextProvider = (props)=>{
-    const [login, setLogin] = useState(false);
-    const [token, setToken] = useState(null);
     const [pass , setPass] = useState(false);
        const[load, setLoad] = useState(false);
        const [Amount,setAmount] = useState();
        const [Description, setDescription]= useState();
+       let [ total ,settotal] = useState(0);
+
+
+      const dispatch =  useDispatch();
+      const log = useSelector((state)=>state.authdata.login);
+      const tokin = useSelector((state)=>state.authdata.token);
+      const list = useSelector((state)=> state.listdata.listitems);
 
 
 
     let amount =  useRef();
     let description = useRef();
     let option = useRef();
-    const [listitems, setListitems] = useState([]);
+    
+      
+    const [profile, setProfile]=useState(false);
+
+    const ProfileHandler = ()=>{
+        setProfile(true);
+    }
+    
+    
+
 
     const fetchExpenses = async ()=>{
-        setToken(localStorage.getItem("token"));
+
+        dispatch(authActions.token(localStorage.getItem("token")));
         let respose =  await fetch("https://redux-expensetracker-default-rtdb.firebaseio.com/data.json");
         let data = await respose.json();
         console.log(data);
         if(data)
         {
-        //     setListitems([]);
-        setListitems(data);
-        }
-        // else{
-        //     setListitems(data);
-        // }
         // setListitems(data);
-        
+        let Tot = 0;
+        let count = data.map((item)=>{
+          Tot = Tot+  Number(item.amount);
+        });
+        settotal(Tot);
+        dispatch(listActions.entereddata(data));
+        }     
     }
 
     useEffect(()=>{
-      fetchExpenses();
-      
+      fetchExpenses(); 
     }, []);
 
-    const loginHandler = ()=>{
-        setLogin((pre)=>!pre);
-     }
-    // const  userLogged = !!(localStorage.getItem("token"));
-    const userLogged  = !!token;
-    //   console.log(localStorage.getItem("token"), userLogged);
 
-
-
-      console.log("triggered");
+    // const userLogged  = !!token;
+    const userLogged  = !!tokin;
+    console.log("triggered");
     
-   
-     
-
      const email = useRef();
      const password = useRef();
      const confirm = useRef();
      const reenteredemail = useRef();
+
      const loggedin = (tokens)=>{
-       setToken(tokens);
+        dispatch(authActions.token(tokens));
+    //    setToken(tokens);
        localStorage.setItem("token", tokens);
      }
-     console.log("tokenis", token);
+     console.log("tokenis", tokin);
 
      const passwordHandler = () =>{
         console.log("inside 1");
@@ -99,7 +109,7 @@ export const ContextProvider = (props)=>{
      const submitHandler = async (event)=>{
         event.preventDefault();
         let url = "";
-        if(login)
+        if(log)
         {
             url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCOGbilMEGm-OJcFbkBRGvUEBzxEDlvZJ4";
         }
@@ -151,15 +161,16 @@ export const ContextProvider = (props)=>{
         description : description.current.value,
         option : option.current.value
       }
-      
+      settotal((pre)=>pre + Number(amount.current.value));
       
       let response = await fetch("https://redux-expensetracker-default-rtdb.firebaseio.com/data.json",{
         method : 'PUT',
-        body : JSON.stringify([...listitems, expensedata])
+        body : JSON.stringify([...list, expensedata])
       });
       let ans = await response.json();
       console.log(ans);
-      setListitems((pre)=>   [...pre, expensedata]);
+    //   setListitems((pre)=>   [...pre, expensedata]);
+      dispatch(listActions.entereddata([...list, expensedata]))
 
       setAmount('');
       setDescription('');
@@ -169,15 +180,12 @@ export const ContextProvider = (props)=>{
 
         const val = {
             submitHandler : submitHandler,
-            loginHandler : loginHandler,
-            login : login,
-            setLogin : setLogin,
+            
             email : email,
             reenteredemail:reenteredemail,
             password: password,
             confirm : confirm,
             userLogged : userLogged,
-            setToken : setToken,
             passwordHandler : passwordHandler,passwordcorrection:passwordcorrection,
             pass:pass,
             load:load,
@@ -186,14 +194,16 @@ export const ContextProvider = (props)=>{
             description: description,
             option:option,
             submitHandle : submitHandle,
-            listitems : listitems,
-            setListitems : setListitems,
-            token : token,
             Amount : Amount,
             Description : Description,
             setAmount : setAmount,
-            setDescription : setDescription
-            // setuserlogged :setuserlogged
+            setDescription : setDescription,
+             profile :profile,
+            ProfileHandler : ProfileHandler,
+            setProfile : setProfile,
+            total : total,
+            settotal : settotal
+
         }
     return<Context.Provider value={val}>
         {props.children}

@@ -16,6 +16,18 @@ input{
 h3,button{
     text-align: center;
 }
+.backdrop button{
+    margin: .8rem;
+    background-color: antiquewhite;
+    border :.5px solid black;
+}
+
+.btns button{
+    background-color: rgb(105, 86, 62);
+    color :  antiquewhite;
+    border :.5px solid black;
+
+}
 
 
 .log{

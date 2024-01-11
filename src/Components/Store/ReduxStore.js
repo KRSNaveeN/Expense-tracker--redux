@@ -1,5 +1,6 @@
 
 import {createSlice, configureStore} from '@reduxjs/toolkit';
+import themeslice from './Slices/Themeslice';
 
 const authstate = {login : false, token : null, localId:''};
 const data  = {
@@ -38,7 +39,8 @@ const dataslice = createSlice({
 const store = configureStore({
     reducer : {
         authdata : authslice.reducer,
-        listdata : dataslice.reducer
+        listdata : dataslice.reducer,
+        themedata : themeslice.reducer,
     }
 });
 

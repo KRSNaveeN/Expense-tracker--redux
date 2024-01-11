@@ -65,10 +65,10 @@ const ProfilePage = ()=>{
     return<>
     <section className={classes.contact}>
             <div>
-                <button onClick={logoutHandler}>LOGOUT</button>
+                <button onClick={logoutHandler}>Logout</button>
             </div>
             <div className={classes.cancel}>
-                <h2>Contact</h2>
+                <h4>Contact</h4>
                 <button>Cancel</button>
             </div>
             <div className={classes.details}>

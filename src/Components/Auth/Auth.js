@@ -46,18 +46,20 @@ const loginHandler = ()=>{
     </div>
 
 </form>
-       
+       <div className={classes.btns}>
 
-        <div >
+        <div  >
             <button onClick={ctx.passwordHandler} className={classes.log}>Forget Password</button>
         </div>
 
           <div>
          
-           <button onClick={loginHandler} className={classes.log}>
-            <h4 >{!login ? "Already have an Account? Login" : "Sign up with new Account"}</h4>
+          <h5 > <button onClick={loginHandler} className={classes.log}>
+            {!login ? "Already have an Account? Login" : "Sign up with new Account"}
             </button> 
+            </h5>
             
+        </div>
         </div>
         </>}
 

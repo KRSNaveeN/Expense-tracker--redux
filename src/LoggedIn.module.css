@@ -1,15 +1,19 @@
 .disp{
     display:flex;
-    background-color: rgb(112, 141, 141);
+    background-color: rgb(168, 118, 57);
     height:60px;
     align-items: center;
     justify-content: space-between;
+   
 }
 button{
-    color: rgb(0, 115, 255);
+    color: rgb(168, 118, 57);
     height: 40px;
     font-weight: bold;
-    padding: 0px 5px;;
+    padding: 0px .8rem;
+    margin: 1px;
+    border: 1px solid black;
+    /* border-radius: 5px; */
 }
 input {
     border: 1px solid black;
@@ -29,4 +33,20 @@ input {
     display : flex;
     
     justify-content: space-between;
+}
+
+.btns{
+    display:flex;
+    max-width: 100%;
+    /* margin: auto; */
+    margin : .8rem;
+    justify-content: space-between;
+}
+
+.premium{
+    background-color: black;
+    color: rgba(252, 252, 248, 0.936);
+}
+.normal{
+    background-color:  black;
 }

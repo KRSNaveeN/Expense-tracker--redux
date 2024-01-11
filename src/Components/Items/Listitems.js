@@ -4,6 +4,7 @@ import classes from './Listitems.module.css';
 import Table from 'react-bootstrap/Table';
 import { useDispatch, useSelector } from "react-redux";
 import { listActions } from "../Store/ReduxStore";
+import { themeActions } from "../Store/Slices/Themeslice";
 
 const Listitems = ()=>{
   let ctx =   useContext(Context);
@@ -12,9 +13,16 @@ const Listitems = ()=>{
      const dispatch = useDispatch();
 
   const editHandler = async (item)=>{
+    let x = ctx.total - item.amount;
+    if(x<10000)
+    {
+      dispatch(themeActions.premiumoff())
+    }
     ctx.setAmount(item.amount);
     ctx.setDescription(item.description)
     ctx.settotal((pre)=>pre- (item.amount));
+    
+    
      let updatedlist = list.filter((x)=>{return x.description != item.description});
     dispatch(listActions.entereddata(updatedlist));
     console.log("edited", item);
@@ -25,6 +33,11 @@ const Listitems = ()=>{
   }
 
   const deleteHandler = async (item)=>{
+    let x = ctx.total - item.amount;
+    if(x<10000)
+    {
+      dispatch(themeActions.premiumoff())
+    }
      console.log("expense deleted");
      ctx.settotal((pre)=>pre- (item.amount));
     let updatedlist = list.filter((x)=>{return x.description != item.description});
@@ -45,7 +58,9 @@ const Listitems = ()=>{
                 <tr>
                     <td>Descripton</td>
                     <td>Amount</td>
-                    <td>Option</td>
+                    <td>Category</td>
+                    <td>Edit item</td>
+                    <td>Delete item</td>
                 </tr>
             </thead>
             <tbody >
@@ -53,6 +68,7 @@ const Listitems = ()=>{
                 // let count =0;
                 list.map((items)=>{
                   //  settotal((pre)=>pre+items.amount);
+                  
                 return <tr>
                         <td>{items.description}</td>
                         <td>{items.amount}</td>

@@ -20,6 +20,7 @@ export const ContextProvider = (props)=>{
       const log = useSelector((state)=>state.authdata.login);
       const tokin = useSelector((state)=>state.authdata.token);
       const list = useSelector((state)=> state.listdata.listitems);
+      const theme = useSelector((state)=> state.themedata.theme);
 
 
 

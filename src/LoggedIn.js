@@ -5,21 +5,26 @@ import Additems from './Components/Items/Additems';
 import Listitems from './Components/Items/Listitems';
 import ProfilePage from './Components/Layout/ProfilePage';
 import Context from './Components/Store/AuthContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { themeActions } from './Components/Store/Slices/Themeslice';
+import MyComponent from './Components/Download/download';
 const LoggedIn = ()=>{
+    
 
+    let dispatch = useDispatch();
+    let premium = useSelector((state)=>state.themedata.theme)
+    let togglebtn = useSelector((state)=> state.themedata.togglebtn)
      
     
-    // const [profile, setProfile]=useState(false);
-
-    // const ProfileHandler = ()=>{
-    //     setProfile(true);
-    // }
+    
    const ctx = useContext(Context);
  useEffect(()=>{
         if(localStorage.getItem("token") != null){
             ctx.setProfile(false);
         }
-    },[])
+    },[]);
+
+
 
     console.log(ctx.total, "total caculated");
 
@@ -50,28 +55,46 @@ const LoggedIn = ()=>{
         }
       
     };
+
+    const premiumHandler = ()=>{
+        
+          dispatch(themeActions.premium());
+    }
+    const toggleHandler = ()=>{
+        dispatch(themeActions.toggle());
+    }
    
-    return <>
+    return <div className={premium ? classes.premium : undefined}>
     <header className={classes.disp}>
         {!ctx.profile ? <h4>Welcome to Expense tracker</h4> : <h4>Learners never Quit</h4> }
         {!ctx.profile ? <div>
              Your Profile is Incomplete
-            <button onClick={ctx.ProfileHandler}>Complete Now</button>
+            <span onClick={ctx.ProfileHandler}>Complete Now</span>
             </div> : <h5>Your Profile</h5>
         }
     </header>
         
      <section>
     {
-        !ctx.profile ? <>
+        !ctx.profile ? <div >
+        <div className={classes.btns}>
         <button onClick={verifyEmailHandler}>Verify Email</button>
-        {(ctx.total >= 10000) && <button>Activate Premium</button>}
+        {(ctx.total >= 10000) && <>
+            <button onClick={premiumHandler}>Activate Premium</button>
+            
+            {togglebtn && (<button onClick={toggleHandler}>Theme</button>)}
+            
+            </> }
+        <MyComponent/>
+        
+        </div>
+       
          <Additems/>
          <Listitems/> 
-        </>: <ProfilePage/>
+        </div>: <ProfilePage/>
     }
     </section>      
-    </>
+    </div>
 }
 
 export default LoggedIn;
